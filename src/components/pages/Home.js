@@ -8,7 +8,9 @@ import '../../assets/style/card.css'
 const Home = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const [search, setSearch] = useState("");
     const [pokemons, setPokemons] = useState([]);
+    const [originalPokemons, setOriginalPokemons] = useState([]);
     const [offset, setOffset] = useState(152);
     const [limit, setLimit] = useState(50);
     let test = searchParams.get("query");
@@ -41,6 +43,7 @@ const Home = () => {
                     }, []);
 
                     setPokemons(pokemons);
+                    setOriginalPokemons(pokemons); // sauvegarder la liste originale
                     setLoading(false);
                 });
             })
@@ -49,6 +52,11 @@ const Home = () => {
                 setLoading(false);
             });
     }, []);
+
+    useEffect(() => {
+        const filteredPokemons = originalPokemons.filter(pokemon => pokemon.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+        setPokemons(filteredPokemons);
+    }, [search, originalPokemons]); // inclure originalPokemons dans les dépendances
 
     const fetchMorePokemons = () => {
         axios
@@ -122,6 +130,9 @@ const Home = () => {
         <div className='px-1 py-1 mt-3'>
             <h1 className='title d-flex justify-content-center mb-4'>Liste des pokémons</h1>
             <div className='row w-100'>
+                <div className="d-flex justify-content-center">
+                    <input className="form-control w-25" type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+                </div>
                 {loading ? (
                     <div className="d-flex justify-content-center">
                         <span className="loader"></span>
