@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 export default function Navigation() {
+	const [searchParams, setSearchParams] = useSearchParams();
+    let test = searchParams.get("query");
+
 	return (
 		<nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
 			<div className='container-fluid'>
@@ -16,7 +19,7 @@ export default function Navigation() {
 						</li>
 					</ul>
 					<form className='d-flex' method='GET' action='?'>
-						<input id="search" className='form-control me-2' type='search' placeholder='Rechercher' aria-label='Rechercher' name="query" />
+						<input id="search" className='form-control me-2' type='search' placeholder='Rechercher' aria-label='Rechercher' name="query" defaultValue={test} />
 						<button className='btn btn-outline-success' type='submit'>
 							<i className="fa-solid fa-magnifying-glass"></i>
 						</button>

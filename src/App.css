@@ -1,44 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap');
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 * {
 	box-sizing: border-box;
 }
@@ -48,3 +9,352 @@ body {
 	font-family: Poppins, sans-serif;
 	background-image: linear-gradient(0deg, var(--bg-color), var(--bg-color)), url('../public/assets/img/bg.jpg');
 }
+
+.pokedex-app {
+	padding: 1rem;
+	border-radius: 1rem;
+}
+
+/*
+  Pokemon type colors
+*/
+.type-normal {
+  --color: #c2c2a1;
+}
+
+.type-flying {
+  --color: #bab0d5;
+}
+
+.type-ghost {
+  --color: #735797;
+}
+
+.type-dark {
+  --color: #333;
+}
+
+.type-steel {
+  --color: #ccccde;
+}
+
+.type-ground {
+  --color: #b1736c;
+}
+
+.type-poison {
+  --color: #7c538c;
+}
+
+.type-grass {
+  --color: #48d0b0;
+}
+
+.type-fire {
+  --color: #fb6c6c;
+}
+
+.type-electric {
+  --color: #ffd86f;
+}
+
+.type-fairy {
+  --color: #f469a9;
+}
+
+.type-bug {
+  --color: #c3ce75;
+}
+
+.type-fighting {
+  --color: #d6b591;
+}
+
+.type-water {
+  --color: #609fb5;
+}
+
+.type-psychic {
+  --color: #9b7fa6;
+}
+
+.type-ice {
+  --color: #7fccec;
+}
+
+.type-rock {
+  --color: #a6aab6;
+}
+
+.type-dragon {
+  --color: #f9be00;
+}
+
+/*
+  Background Pokeball decoration
+*/
+.bg-pokeball {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	right: -110px;
+	bottom: 5px;
+	font-size: 7px;
+	color: rgba(255, 255, 255, 0.2);
+}
+
+.bg-pokeball::before,
+.bg-pokeball::after {
+	display: block;
+	border-radius: 100%;
+}
+
+.bg-pokeball::before {
+	content: '';
+	position: relative;
+	width: 17em;
+	padding-bottom: 10em;
+	border: 4em solid currentColor;
+	clip-path: polygon(0 0, 0 40%, 50% 40%, 50% 60%, 0 60%, 0 100%, 100% 100%, 100% 60%, 50% 60%, 50% 40%, 100% 40%, 100% 0);
+}
+
+.bg-pokeball::after {
+	content: '';
+	position: absolute;
+	width: 5em;
+	padding-bottom: 5em;
+	background-color: currentColor;
+}
+
+/*
+    Animations
+*/
+@keyframes spin {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes pull-up-center {
+	from {
+		transform: translateY(50%) translateX(-50%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0) translateX(-50%);
+		opacity: 1;
+	}
+}
+
+@keyframes pull-down-center {
+	from {
+		transform: translateY(0) translateX(-50%);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(50%) translateX(-50%);
+		opacity: 0;
+	}
+}
+
+@keyframes pull-up {
+	from {
+		transform: translateY(10%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes fill {
+	from {
+		width: 0;
+	}
+}
+
+.pokedex-view {
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	grid-template-columns: repeat(1, 1fr);
+}
+
+@media screen and (min-width: 800px) {
+	.pokedex-view {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	.pokedex-view {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media screen and (min-width: 1920px) {
+	.pokedex-view {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+.title {
+  font-family: Gill Sans;
+  font-size: 50px;
+}
+
+.titre {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 42px;
+	font-weight: 300;
+	letter-spacing: 0.08em;
+}
+.cardPokemon {
+	border: solid 22px #ffe165;
+	color: white;
+	border-radius: 25px;
+	font-family: 'Gill Sans';
+	padding-right: 16px;
+	padding-left: 16px;
+	width: 500px;
+	height: auto;
+	background: var(--color);
+}
+.cardHeader {
+	display: flex;
+	justify-content: space-between;
+	padding-bottom: 6px;
+	border-bottom: solid 2px white;
+}
+.cardImg {
+	display: flex;
+	justify-content: center;
+}
+.nomPokemon {
+	font-size: 36px;
+	margin-left: 32px;
+}
+.petit {
+	font-size: 16px;
+}
+.pv {
+	font-size: 36px;
+	margin-right: 32px;
+}
+.imgPokemon {
+	width: 350px;
+	height: 350px;
+	/* border: solid 2px white; */
+}
+
+.hrPerso {
+	border-top: 2px solid white;
+	padding-top: 6px;
+}
+
+.cardFooter {
+	padding-top: 6px;
+}
+
+.typePokemon {
+	display: flex;
+	justify-content: center;
+	font-size: 28px;
+}
+
+.statsPokemon {
+	display: flex;
+	font-size: 24px;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.statsPokemon > div {
+	margin: 0px 36px 0px 36px;
+}
+
+.vitessePokemon {
+	text-align: center;
+	font-size: 24px;
+}
+
+/*********************** Loader ***********************/
+.loader {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	display: inline-block;
+	position: relative;
+	border: 3px solid;
+	border-color: #FFF #FFF transparent transparent;
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
+}
+
+.loader::after,
+.loader::before {
+	content: '';  
+	box-sizing: border-box;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	border: 3px solid;
+	border-color: transparent transparent #FF3D00 #FF3D00;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	box-sizing: border-box;
+	animation: rotationBack 0.5s linear infinite;
+	transform-origin: center center;
+}
+.loader::before {
+	width: 32px;
+	height: 32px;
+	border-color: #000000 #000000 transparent transparent;
+	animation: rotation 1.5s linear infinite;
+}
+	
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+} 
+@keyframes rotationBack {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(-360deg);
+	}
+}
+	  
