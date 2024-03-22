@@ -146,13 +146,8 @@ const Home = () => {
                         {pokemons.map((pokemon) => {
                             return <div key={pokemon.id} className='col-3 my-3'><Card pokemon={pokemon} updateFav={updatePokedex} /></div>
                         })}
-<<<<<<< HEAD
                         { (limit > 0) && !searchQuery ? (
                             <div className="d-flex justify-content-center my-2">
-=======
-                        { (limit > 0) && !test ? (
-                            <div className="d-flex justify-content-center me-2 my-2">
->>>>>>> 21227d4aa16c94d86d8966fdd7641c87d31e3f0a
                                 <button className="btn-pika" onClick={fetchMorePokemons}>
                                     <img src={poke} alt="" className="pokeball" />
                                     <img src={pika} alt="" className="pika" />
