@@ -25,7 +25,6 @@ const ViewPokemon = () => {
                         speed: response.data.stats.find(stat => stat.stat.name === 'speed').base_stat
                     },
                 });
-                console.log(pokemon)
                 setLoading(false);
             } catch (error) {
                 console.error(error);
