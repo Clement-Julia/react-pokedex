@@ -7,6 +7,7 @@ const Pokedex = () => {
     const [pokedex] = useState(JSON.parse(localStorage.getItem('pokedex')) || [])
     const [pokemonData, setPokemonData] = useState([])
     const [searchInput, setSearchInput] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
     
     const navigate = useNavigate()
 
@@ -17,20 +18,27 @@ const Pokedex = () => {
     }
 
     const searchPokemonInput = async () => {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
-        const data = await response.json()
-        const allPokemons = data.results.map(pokemon => pokemon.name)
-        const filteredPokemons = allPokemons.filter(pokemon => pokemon.toLowerCase().includes(searchInput.toLowerCase()))
-        const pokemonDetails = await Promise.all(filteredPokemons.map(async (pokemonName) => {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-            const data = await response.json()
-            return {
-                id: data.id,
-                name: data.name,
-                type: data.types.map(typeObj => typeObj.type.name)
-            }
-        }))
-        setPokemonData(pokemonDetails);
+        setIsLoading(true);
+        try {
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
+            const data = await response.json();
+            const allPokemons = data.results.map(pokemon => pokemon.name);
+            const filteredPokemons = allPokemons.filter(pokemon => pokemon.toLowerCase().includes(searchInput.toLowerCase()));
+            const pokemonDetails = await Promise.all(filteredPokemons.map(async (pokemonName) => {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+                const data = await response.json();
+                return {
+                    id: data.id,
+                    name: data.name,
+                    type: data.types.map(typeObj => typeObj.type.name)
+                };
+            }));
+            setPokemonData(pokemonDetails);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
     }
         
     useEffect(() => {
@@ -64,7 +72,9 @@ const Pokedex = () => {
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
-                        <button className='btn btn-outline-primary' type='button' onClick={searchPokemonInput}>Rechercher</button>
+                         <button className='btn btn-outline-primary' type='button' onClick={searchPokemonInput} disabled={isLoading}>
+                        {isLoading ? "Chargement..." : "Rechercher"}
+                    </button>
                 </div>
             </div>
             {pokemonData.length > 0 ? (
@@ -72,9 +82,9 @@ const Pokedex = () => {
                     <button className='btn btn-outline-danger' onClick={clearPokedex}>Vider le Pokédex</button>
                     <div className='d-flex flex-wrap justify-content-center'>
                         {pokemonData.map((pokemon) => (
-                            <div key={pokemon.id} className='col-5 my-3 mx-1'>
-                                <Card pokemon={pokemon} updateFav={updatePokedex} />
-                            </div>
+                            <div key={pokemon.id} className={`${pokemonData.length === 1 ? 'col-12' : 'col-5'} my-3 mx-1`}>
+                            <Card pokemon={pokemon} updateFav={updatePokedex} />
+                        </div>
                         ))}
                     </div>
                 </div>
