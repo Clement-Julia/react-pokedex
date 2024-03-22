@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '../layout/card';
 import { useNavigate } from 'react-router-dom';
 import { updatePokedex } from '../utils/pokedexUtils';
+import axios from 'axios';
 
 const Pokedex = () => {
     const [pokedex] = useState(JSON.parse(localStorage.getItem('pokedex')) || [])
@@ -20,13 +21,12 @@ const Pokedex = () => {
     const searchPokemonInput = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
-            const data = await response.json();
-            const allPokemons = data.results.map(pokemon => pokemon.name);
+            const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=2000');
+            const allPokemons = response.data.results.map(pokemon => pokemon.name);
             const filteredPokemons = allPokemons.filter(pokemon => pokemon.toLowerCase().includes(searchInput.toLowerCase()));
             const pokemonDetails = await Promise.all(filteredPokemons.map(async (pokemonName) => {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-                const data = await response.json();
+                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+                const data = response.data;
                 return {
                     id: data.id,
                     name: data.name,
@@ -39,7 +39,7 @@ const Pokedex = () => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
         
     useEffect(() => {
         const searchPokedexPokemon = async () => {
