@@ -38,7 +38,7 @@ const ViewPokemon = () => {
     }
     
     var idPokemon = id
-    if (id > 10 & id < 100) {
+    if (id >= 10 & id < 100) {
         idPokemon = '0' + idPokemon
     }
     if (id < 10) {
