@@ -6,7 +6,7 @@ import { updatePokedex } from '../utils/pokedexUtils';
 const Pokedex = () => {
     const [pokedex, setPokedex] = useState(JSON.parse(localStorage.getItem('pokedex')) || [])
     const [pokemonData, setPokemonData] = useState([])
-    const [searchInput, setSearchInput] = useState('');
+    const [searchInput, setSearchInput] = useState('')
     const navigate = useNavigate()
 
 
@@ -15,7 +15,7 @@ const Pokedex = () => {
         navigate('/')
     }
 
-    const handleSearch = async () => {
+    const searchPokemonInput = async () => {
         const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
         const data = await response.json()
         const allPokemons = data.results.map(pokemon => pokemon.name)
@@ -33,7 +33,7 @@ const Pokedex = () => {
     }
         
     useEffect(() => {
-        const fetchData = async () => {
+        const searchPokedexPokemon = async () => {
             const dataPromises = pokedex.map(async (pokemonId) => {
                 const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
                 const { id, name, types } = await response.json()
@@ -43,11 +43,11 @@ const Pokedex = () => {
             });
                        
 
-            const fetchedData = await Promise.all(dataPromises)
-            setPokemonData(fetchedData)
+            const pokedexPokemons = await Promise.all(dataPromises)
+            setPokemonData(pokedexPokemons)
         }
 
-        fetchData()
+        searchPokedexPokemon()
     }, [pokedex]);
 
     return (
@@ -63,7 +63,7 @@ const Pokedex = () => {
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                         />
-                        <button className='btn btn-outline-primary' type='button' onClick={handleSearch}>Rechercher</button>
+                        <button className='btn btn-outline-primary' type='button' onClick={searchPokemonInput}>Rechercher</button>
                 </div>
             </div>
             {pokemonData.length > 0 ? (
