@@ -17,7 +17,7 @@ const Home = () => {
     const [originalPokemons, setOriginalPokemons] = useState([]);
     const [offset, setOffset] = useState(152);
     const [limit, setLimit] = useState(50);
-    let test = searchParams.get("query");
+    let searchQuery = searchParams.get("query");
     
     const [loading, setLoading] = useState(true);
 
@@ -26,7 +26,7 @@ const Home = () => {
             .get('https://pokeapi.co/api/v2/pokemon', {
                 params: {
                     offset: 0,
-                    limit: test ? 1500 : 151
+                    limit: searchQuery ? 1500 : 151
                 }
             })
             .then((response) => {
@@ -36,7 +36,7 @@ const Home = () => {
     
                 Promise.all(promises).then(pokemonResponses => {
                     const pokemons = pokemonResponses.reduce((filteredPokemons, pokemonResponse) => {
-                        if(!test || pokemonResponse.data.name.toLocaleLowerCase().includes(test)){
+                        if(!searchQuery || pokemonResponse.data.name.toLocaleLowerCase().includes(searchQuery)){
                             filteredPokemons.push({
                                 id: pokemonResponse.data.id,
                                 name: pokemonResponse.data.name.charAt(0).toUpperCase() + pokemonResponse.data.name.slice(1),
@@ -77,7 +77,7 @@ const Home = () => {
 
             Promise.all(promises).then(pokemonResponses => {
                 const newPokemons = pokemonResponses.reduce((filteredPokemons, pokemonResponse) => {
-                    if(!test || pokemonResponse.data.name.toLocaleLowerCase().includes(test)){
+                    if(!searchQuery || pokemonResponse.data.name.toLocaleLowerCase().includes(searchQuery)){
                         filteredPokemons.push({
                             id: pokemonResponse.data.id,
                             name: pokemonResponse.data.name.charAt(0).toUpperCase() + pokemonResponse.data.name.slice(1),
@@ -111,7 +111,7 @@ const Home = () => {
 
             Promise.all(promises).then(pokemonResponses => {
                 const newPokemons = pokemonResponses.reduce((filteredPokemons, pokemonResponse) => {
-                    if(!test || pokemonResponse.data.name.toLocaleLowerCase().includes(test)){
+                    if(!searchQuery || pokemonResponse.data.name.toLocaleLowerCase().includes(searchQuery)){
                         filteredPokemons.push({
                             id: pokemonResponse.data.id,
                             name: pokemonResponse.data.name.charAt(0).toUpperCase() + pokemonResponse.data.name.slice(1),
@@ -146,7 +146,7 @@ const Home = () => {
                         {pokemons.map((pokemon) => {
                             return <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
                         })}
-                        { (limit > 0) && !test ? (
+                        { (limit > 0) && !searchQuery ? (
                             <div className="d-flex justify-content-center my-2">
                                 <button className="btn-pika" onClick={fetchMorePokemons}>
                                     <img src={poke} alt="" className="pokeball" />
