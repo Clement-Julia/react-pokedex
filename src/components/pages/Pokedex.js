@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { updatePokedex } from '../utils/pokedexUtils';
 
 const Pokedex = () => {
-    const [pokedex, setPokedex] = useState(JSON.parse(localStorage.getItem('pokedex')) || [])
+    const [pokedex] = useState(JSON.parse(localStorage.getItem('pokedex')) || [])
     const [pokemonData, setPokemonData] = useState([])
     const [searchInput, setSearchInput] = useState('')
+    
     const navigate = useNavigate()
 
 
@@ -34,7 +35,7 @@ const Pokedex = () => {
         
     useEffect(() => {
         const searchPokedexPokemon = async () => {
-            const dataPromises = pokedex.map(async (pokemonId) => {
+            const data = pokedex.map(async (pokemonId) => {
                 const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
                 const { id, name, types } = await response.json()
                 const pokemonTypes = types.map(typeObj => typeObj.type.name)
@@ -43,7 +44,7 @@ const Pokedex = () => {
             });
                        
 
-            const pokedexPokemons = await Promise.all(dataPromises)
+            const pokedexPokemons = await Promise.all(data)
             setPokemonData(pokedexPokemons)
         }
 
@@ -69,9 +70,13 @@ const Pokedex = () => {
             {pokemonData.length > 0 ? (
                 <div className='d-flex flex-column align-items-center'>
                     <button className='btn btn-outline-danger' onClick={clearPokedex}>Vider le Pokédex</button>
-                    {pokemonData.map((pokemon) => (
-                        <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
-                    ))}
+                    <div className='d-flex flex-wrap justify-content-center'>
+                        {pokemonData.map((pokemon) => (
+                            <div key={pokemon.id} className='col-5 my-3 mx-1'>
+                                <Card pokemon={pokemon} updateFav={updatePokedex} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ) : (
                 <p className="text-center fs-2 mt-5">Le Pokédex est vide.</p>

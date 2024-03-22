@@ -144,7 +144,7 @@ const Home = () => {
                 ) : pokemons.length > 0 ? (
                     <>
                         {pokemons.map((pokemon) => {
-                            return <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
+                            return <div key={pokemon.id} className='col-3 my-3'><Card pokemon={pokemon} updateFav={updatePokedex} /></div>
                         })}
 <<<<<<< HEAD
                         { (limit > 0) && !searchQuery ? (
