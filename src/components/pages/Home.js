@@ -8,13 +8,13 @@ import { updatePokedex } from '../utils/pokedexUtils';
 
 const Home = () => {
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [pokemons, setPokemons] = useState([]);
-    const [offset, setOffset] = useState(152);
-    const [limit, setLimit] = useState(50);
-    let test = searchParams.get("query");
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [pokemons, setPokemons] = useState([])
+    const [offset, setOffset] = useState(152)
+    const [limit, setLimit] = useState(50)
+    let test = searchParams.get("query")
     
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         axios
@@ -26,7 +26,7 @@ const Home = () => {
             })
             .then((response) => {
                 const promises = response.data.results.map(pokemon => {
-                    return axios.get(pokemon.url);
+                    return axios.get(pokemon.url)
                 });
     
                 Promise.all(promises).then(pokemonResponses => {
@@ -36,7 +36,7 @@ const Home = () => {
                                 id: pokemonResponse.data.id,
                                 name: pokemonResponse.data.name.charAt(0).toUpperCase() + pokemonResponse.data.name.slice(1),
                                 type: pokemonResponse.data.types.map(type => type.type.name)
-                            });
+                            })
                         }
                         return filteredPokemons;
                     }, []);
@@ -46,8 +46,8 @@ const Home = () => {
                 });
             })
             .catch((error) => {
-                console.error(error);
-                setLoading(false);
+                console.error(error)
+                setLoading(false)
             });
     }, []);
 
@@ -61,7 +61,7 @@ const Home = () => {
         })
         .then((response) => {
             const promises = response.data.results.map(pokemon => {
-                return axios.get(pokemon.url);
+                return axios.get(pokemon.url)
             });
 
             Promise.all(promises).then(pokemonResponses => {
@@ -73,11 +73,11 @@ const Home = () => {
                             type: pokemonResponse.data.types.map(type => type.type.name)
                         });
                     }
-                    return filteredPokemons;
+                    return filteredPokemons
                 }, []);
 
-                setPokemons(prevPokemons => [...prevPokemons, ...newPokemons]);
-                setOffset(offset + 50);
+                setPokemons(prevPokemons => [...prevPokemons, ...newPokemons])
+                setOffset(offset + 50)
             });
         })
         .catch((error) => {
@@ -121,7 +121,7 @@ const Home = () => {
 
     return (
         <div className='px-1 py-1 mt-5'>
-            <h1 className='title d-flex justify-content-center mb-4'>Liste des pokémons</h1>
+            <h1 className='display-4 d-flex justify-content-center mb-4'>Liste des pokémons</h1>
             <div className='row w-100'>
                 {loading ? (
                     <div className="d-flex justify-content-center">
