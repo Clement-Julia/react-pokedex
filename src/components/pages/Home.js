@@ -17,10 +17,12 @@ const Home = () => {
     const [originalPokemons, setOriginalPokemons] = useState([]);
     const [offset, setOffset] = useState(152);
     const [limit, setLimit] = useState(50);
+    const [fetchStatus, setFecthStatus] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
+    const [loading, setLoading] = useState(true);
     let searchQuery = searchParams.get("query");
     
-    const [loading, setLoading] = useState(true)
-
+    
     useEffect(() => {
         axios
             .get('https://pokeapi.co/api/v2/pokemon', {
@@ -60,9 +62,12 @@ const Home = () => {
     useEffect(() => {
         const filteredPokemons = originalPokemons.filter(pokemon => pokemon.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
         setPokemons(filteredPokemons);
-    }, [search, originalPokemons]); // inclure originalPokemons dans les dépendances
+    }, [search, originalPokemons]);
 
     const fetchMorePokemons = () => {
+        if (isFetching) return;
+        setIsFetching(true);
+        setFecthStatus(true);
         axios
         .get('https://pokeapi.co/api/v2/pokemon', {
             params: {
@@ -89,14 +94,19 @@ const Home = () => {
 
                 setPokemons(prevPokemons => [...prevPokemons, ...newPokemons])
                 setOffset(offset + 50)
+                setIsFetching(false);
             });
         })
         .catch((error) => {
             console.error(error);
+            setIsFetching(false);
         });
     }
 
     const fetchAllPokemons = async () => {
+        if (isFetching) return;
+        setIsFetching(true);
+        setFecthStatus(true);
         axios
         .get('https://pokeapi.co/api/v2/pokemon', {
             params: {
@@ -123,12 +133,18 @@ const Home = () => {
 
                 setPokemons(prevPokemons => [...prevPokemons, ...newPokemons]);
                 setLimit(0);
+                setIsFetching(false);
             });
         })
         .catch((error) => {
             console.error(error);
+            setIsFetching(false);
         });
     }
+
+    console.log(offset)
+    console.log(limit)
+    console.log(searchQuery)
 
     return (
         <div className='px-1 py-1 mt-5'>
@@ -148,23 +164,28 @@ const Home = () => {
                         })}
                         { (limit > 0) && !searchQuery ? (
                             <div className="d-flex justify-content-center my-2">
-                                <button className="btn-pika" onClick={fetchMorePokemons}>
-                                    <img src={poke} alt="" className="pokeball" />
-                                    <img src={pika} alt="" className="pika" />
-                                    <span className="go">50 more!</span>
-                                    <span className="pword">pika</span>
-                                    <span className="pword2">pika</span>
-                                </button>
-                                <button className="btn-pika ms-2" onClick={fetchAllPokemons}>
-                                    <img src={poke} alt="" className="pokeball" />
-                                    <img src={chari} alt="" className="chari" />
-                                    <span className="go All">All!</span>
-                                    <span className="pword">draco</span>
-                                    <span className="pword2">draco</span>
-                                </button>
+                                {fetchStatus ?
+                                    <span className="loader"></span>
+                                : 
+                                <>
+                                    <button className="btn-pika" onClick={fetchMorePokemons}>
+                                        <img src={poke} alt="" className="pokeball" />
+                                        <img src={pika} alt="" className="pika" />
+                                        <span className="go">50 more!</span>
+                                        <span className="pword">pika</span>
+                                        <span className="pword2">pika</span>
+                                    </button>
+                                    <button className="btn-pika ms-2" onClick={fetchAllPokemons}>
+                                        <img src={poke} alt="" className="pokeball" />
+                                        <img src={chari} alt="" className="chari" />
+                                        <span className="go All">All!</span>
+                                        <span className="pword">draco</span>
+                                        <span className="pword2">draco</span>
+                                    </button>
+                                </>
+                                }
                             </div>
-                        ) : null
-                    }
+                        ) : null }
                     </>
                 ) : (
                     <p>No pokemons found</p>
