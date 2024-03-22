@@ -25,7 +25,6 @@ const ViewPokemon = () => {
                         speed: response.data.stats.find(stat => stat.stat.name === 'speed').base_stat
                     },
                 });
-                console.log(pokemon)
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -39,7 +38,7 @@ const ViewPokemon = () => {
     }
     
     var idPokemon = id
-    if (id > 10 & id < 100) {
+    if (id >= 10 & id < 100) {
         idPokemon = '0' + idPokemon
     }
     if (id < 10) {
