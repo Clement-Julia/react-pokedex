@@ -11,10 +11,13 @@ const Card = ({ pokemon, updateFav }) => {
 	const mouseLeave = () => {
 		setIsHovered(false)
 	}
-	const handleUpdateFavorite = () => {
+	const handleUpdateFavorite = (event) => {
+		event.preventDefault();
 		setIsFavorite(!isFavorite)
 		updateFav(pokemon.id)
-		window.location.reload()
+		if (window.location.pathname !== "/") {
+			window.location.reload();
+		}
 	}
 
 	// Gère l'affichage de l'étoile selon présence dans le pokédex
@@ -32,16 +35,14 @@ const Card = ({ pokemon, updateFav }) => {
 	if (id < 10) {
 		id = '00' + id
 	}
-
-	{
-		pokemon.types.map((type, i) => {
-			typeClass += ` type-${type.toLowerCase()}`
-		})
-	}
+	
+	pokemon.type.map((type, i) => {
+		typeClass += ` type-${type.toLowerCase()}`
+	})
 
 	return (
 		<div className='col-3 my-3'>
-			{/* <Link className='text-decoration-none' key={pokemon.id} to={{ pathname: `/pokemon/${pokemon.id}` }}> */}
+			<Link className='text-decoration-none' key={pokemon.id} to={{ pathname: `/pokemon/${pokemon.id}` }}>
 				<div className={`card m-1 row flex-row ${typeClass}`}>
 					<div className='bg-pokeball'></div>
 					<span className='pokemon-id'>{`#${id}`}</span>
@@ -57,10 +58,10 @@ const Card = ({ pokemon, updateFav }) => {
 					</div>
 					<div className='card-title col-6'>
 						<div className='pokemon-types mt-1'>
-							{pokemon.types.map((type, i) => {
+							{pokemon.type.map((type, i) => {
 								return (
 									<span key={i} className='type'>
-										{type}
+										{type.charAt(0).toUpperCase() + type.slice(1)}
 									</span>
 								)
 							})}
@@ -72,7 +73,7 @@ const Card = ({ pokemon, updateFav }) => {
 						{/* <img alt="bulbasaur" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg"/> */}
 					</div>
 				</div>
-			{/* </Link> */}
+			</Link>
 		</div>
 	)
 }

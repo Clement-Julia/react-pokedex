@@ -4,6 +4,7 @@ import axios from "axios"
 
 import Card from '../layout/card'
 import '../../assets/style/card.css'
+import { updatePokedex } from '../utils/pokedexUtils';
 
 const Home = () => {
 
@@ -119,7 +120,7 @@ const Home = () => {
     }
 
     return (
-        <div className='px-1 py-1 mt-3'>
+        <div className='px-1 py-1 mt-5'>
             <h1 className='title d-flex justify-content-center mb-4'>Liste des pokémons</h1>
             <div className='row w-100'>
                 {loading ? (
@@ -129,7 +130,7 @@ const Home = () => {
                 ) : pokemons.length > 0 ? (
                     <>
                         {pokemons.map((pokemon) => {
-                            return <Card key={pokemon.id} pokemon={pokemon}></Card>
+                            return <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
                         })}
                         { (limit > 0) && !test ? (
                             <div className="d-flex justify-content-center my-2">

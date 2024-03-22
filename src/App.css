@@ -89,7 +89,10 @@ body {
 .type-dragon {
   --color: #f9be00;
 }
-
+.fav {
+	color: #efce63;
+	font-size: 1.5rem;
+}
 /*
   Background Pokeball decoration
 */
