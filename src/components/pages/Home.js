@@ -2,17 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import axios from "axios"
 
+import chari from "../../assets/img/charizard.svg"
+import pika from "../../assets/img/pika.svg"
+import poke from "../../assets/img/pokeball.svg"
 import Card from '../layout/card'
 import '../../assets/style/card.css'
 import { updatePokedex } from '../utils/pokedexUtils';
 
 const Home = () => {
 
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [pokemons, setPokemons] = useState([])
-    const [offset, setOffset] = useState(152)
-    const [limit, setLimit] = useState(50)
-    let test = searchParams.get("query")
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [search, setSearch] = useState("");
+    const [pokemons, setPokemons] = useState([]);
+    const [originalPokemons, setOriginalPokemons] = useState([]);
+    const [offset, setOffset] = useState(152);
+    const [limit, setLimit] = useState(50);
+    let test = searchParams.get("query");
     
     const [loading, setLoading] = useState(true)
 
@@ -42,6 +47,7 @@ const Home = () => {
                     }, []);
 
                     setPokemons(pokemons);
+                    setOriginalPokemons(pokemons);
                     setLoading(false);
                 });
             })
@@ -50,6 +56,11 @@ const Home = () => {
                 setLoading(false)
             });
     }, []);
+
+    useEffect(() => {
+        const filteredPokemons = originalPokemons.filter(pokemon => pokemon.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+        setPokemons(filteredPokemons);
+    }, [search, originalPokemons]); // inclure originalPokemons dans les dépendances
 
     const fetchMorePokemons = () => {
         axios
@@ -121,8 +132,11 @@ const Home = () => {
 
     return (
         <div className='px-1 py-1 mt-5'>
-            <h1 className='display-4 d-flex justify-content-center mb-4'>Liste des pokémons</h1>
-            <div className='row w-100'>
+            <h1 className='display-2 d-flex justify-content-center mb-4'>Liste des pokémons</h1>
+            <div className='row w-100 ms-0'>
+                <div className="d-flex justify-content-center">
+                    <input className="form-control w-25" type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+                </div>
                 {loading ? (
                     <div className="d-flex justify-content-center">
                         <span className="loader"></span>
@@ -133,9 +147,21 @@ const Home = () => {
                             return <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
                         })}
                         { (limit > 0) && !test ? (
-                            <div className="d-flex justify-content-center my-2">
-                                <button className="btn btn-primary me-2" onClick={fetchMorePokemons}>Show 50</button>
-                                <button className="btn btn-primary" onClick={fetchAllPokemons}>Show all</button>
+                            <div className="d-flex justify-content-center me-2 my-2">
+                                <button className="btn-pika" onClick={fetchMorePokemons}>
+                                    <img src={poke} alt="" className="pokeball" />
+                                    <img src={pika} alt="" className="pika" />
+                                    <span className="go">50 more!</span>
+                                    <span className="pword">pika</span>
+                                    <span className="pword2">pika</span>
+                                </button>
+                                <button className="btn-pika ms-2" onClick={fetchAllPokemons}>
+                                    <img src={poke} alt="" className="pokeball" />
+                                    <img src={chari} alt="" className="chari" />
+                                    <span className="go All">All!</span>
+                                    <span className="pword">draco</span>
+                                    <span className="pword2">draco</span>
+                                </button>
                             </div>
                         ) : null
                     }
