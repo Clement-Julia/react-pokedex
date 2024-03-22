@@ -17,6 +17,11 @@ export default function Navigation() {
 								Accueil
 							</Link>
 						</li>
+						<li>
+							<Link className='nav-link' to='/pokedex'>
+								Pokédex
+							</Link>
+						</li>
 					</ul>
 					<form className='d-flex' method='GET' action='?'>
 						<input id="search" className='form-control me-2' type='search' placeholder='Rechercher' aria-label='Rechercher' name="query" defaultValue={test} />
