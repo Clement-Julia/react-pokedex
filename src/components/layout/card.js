@@ -1,6 +1,31 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
-const Card = ({ pokemon }) => {
+const Card = ({ pokemon, updateFav }) => {
+	const [isHovered, setIsHovered] = useState(false)
+	const [isFavorite, setIsFavorite] = useState(false)
+
+	const mouseEnter = () => {
+		setIsHovered(true)
+	}
+	const mouseLeave = () => {
+		setIsHovered(false)
+	}
+	const handleUpdateFavorite = (event) => {
+		event.preventDefault();
+		setIsFavorite(!isFavorite)
+		updateFav(pokemon.id)
+		if (window.location.pathname !== "/") {
+			window.location.reload();
+		}
+	}
+
+	// Gère l'affichage de l'étoile selon présence dans le pokédex
+	useEffect(() => {
+		const pokedex = JSON.parse(localStorage.getItem('pokedex')) || []
+		setIsFavorite(pokedex.includes(pokemon.id))
+	}, [pokemon.id])
+
 	let id = pokemon.id
 	let typeClass = ''
 
@@ -10,7 +35,7 @@ const Card = ({ pokemon }) => {
 	if (id < 10) {
 		id = '00' + id
 	}
-
+	
 	pokemon.type.map((type, i) => {
 		typeClass += ` type-${type.toLowerCase()}`
 	})
@@ -21,7 +46,16 @@ const Card = ({ pokemon }) => {
 				<div className={`card m-1 row flex-row ${typeClass}`}>
 					<div className='bg-pokeball'></div>
 					<span className='pokemon-id'>{`#${id}`}</span>
-					<h2>{pokemon.name}</h2>
+					<div className='d-flex justify-content-between align-items-center'>
+						<h2>{pokemon.name}</h2>
+						<div onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+							{isFavorite || isHovered ? (
+								<i className="fa-solid fa-star fav" onClick={handleUpdateFavorite}></i>
+							) : (
+								<i className="fa-regular fa-star fav" onClick={handleUpdateFavorite}></i>
+							)}
+						</div>
+					</div>
 					<div className='card-title col-6'>
 						<div className='pokemon-types mt-1'>
 							{pokemon.type.map((type, i) => {
