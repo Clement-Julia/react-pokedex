@@ -19,7 +19,7 @@ const Home = () => {
     const [limit, setLimit] = useState(50);
     let searchQuery = searchParams.get("query");
     
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         axios
@@ -31,7 +31,7 @@ const Home = () => {
             })
             .then((response) => {
                 const promises = response.data.results.map(pokemon => {
-                    return axios.get(pokemon.url);
+                    return axios.get(pokemon.url)
                 });
     
                 Promise.all(promises).then(pokemonResponses => {
@@ -41,7 +41,7 @@ const Home = () => {
                                 id: pokemonResponse.data.id,
                                 name: pokemonResponse.data.name.charAt(0).toUpperCase() + pokemonResponse.data.name.slice(1),
                                 type: pokemonResponse.data.types.map(type => type.type.name)
-                            });
+                            })
                         }
                         return filteredPokemons;
                     }, []);
@@ -52,8 +52,8 @@ const Home = () => {
                 });
             })
             .catch((error) => {
-                console.error(error);
-                setLoading(false);
+                console.error(error)
+                setLoading(false)
             });
     }, []);
 
@@ -72,7 +72,7 @@ const Home = () => {
         })
         .then((response) => {
             const promises = response.data.results.map(pokemon => {
-                return axios.get(pokemon.url);
+                return axios.get(pokemon.url)
             });
 
             Promise.all(promises).then(pokemonResponses => {
@@ -84,11 +84,11 @@ const Home = () => {
                             type: pokemonResponse.data.types.map(type => type.type.name)
                         });
                     }
-                    return filteredPokemons;
+                    return filteredPokemons
                 }, []);
 
-                setPokemons(prevPokemons => [...prevPokemons, ...newPokemons]);
-                setOffset(offset + 50);
+                setPokemons(prevPokemons => [...prevPokemons, ...newPokemons])
+                setOffset(offset + 50)
             });
         })
         .catch((error) => {
@@ -132,7 +132,7 @@ const Home = () => {
 
     return (
         <div className='px-1 py-1 mt-5'>
-            <h1 className='title d-flex justify-content-center mb-4'>Liste des pokémons</h1>
+            <h1 className='display-2 d-flex justify-content-center mb-4'>Liste des pokémons</h1>
             <div className='row w-100 ms-0'>
                 <div className="d-flex justify-content-center">
                     <input className="form-control w-25" type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
@@ -146,8 +146,13 @@ const Home = () => {
                         {pokemons.map((pokemon) => {
                             return <Card key={pokemon.id} pokemon={pokemon} updateFav={updatePokedex} />
                         })}
+<<<<<<< HEAD
                         { (limit > 0) && !searchQuery ? (
                             <div className="d-flex justify-content-center my-2">
+=======
+                        { (limit > 0) && !test ? (
+                            <div className="d-flex justify-content-center me-2 my-2">
+>>>>>>> 21227d4aa16c94d86d8966fdd7641c87d31e3f0a
                                 <button className="btn-pika" onClick={fetchMorePokemons}>
                                     <img src={poke} alt="" className="pokeball" />
                                     <img src={pika} alt="" className="pika" />
@@ -155,7 +160,7 @@ const Home = () => {
                                     <span className="pword">pika</span>
                                     <span className="pword2">pika</span>
                                 </button>
-                                <button className="btn-pika" onClick={fetchAllPokemons}>
+                                <button className="btn-pika ms-2" onClick={fetchAllPokemons}>
                                     <img src={poke} alt="" className="pokeball" />
                                     <img src={chari} alt="" className="chari" />
                                     <span className="go All">All!</span>
